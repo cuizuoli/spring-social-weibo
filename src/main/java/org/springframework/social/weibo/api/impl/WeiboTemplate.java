@@ -39,7 +39,14 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * 
+ * <p>This is the central class for interacting with Weibo.</p>
+ * <p>
+ * There are some operations, such as searching, that do not require OAuth
+ * authentication. In those cases, you may use a {@link WeiboTemplate} that is
+ * created through the default constructor and without any OAuth details.
+ * Attempts to perform secured operations through such an instance, however,
+ * will result in {@link NotAuthorizedException} being thrown.
+ * </p>
  * @author cuizuoli
  */
 public class WeiboTemplate extends AbstractOAuth2ApiBinding implements WeiboApiOperations, Weibo {
@@ -51,6 +58,8 @@ public class WeiboTemplate extends AbstractOAuth2ApiBinding implements WeiboApiO
 	private TimelineOperations timelineOperations;
 
 	private ObjectMapper objectMapper;
+
+	private String applicationNamespace;
 
 	/**
 	 * Create a new instance of WeiboTemplate.
@@ -70,7 +79,13 @@ public class WeiboTemplate extends AbstractOAuth2ApiBinding implements WeiboApiO
 	 * @param accessToken An access token given by Weibo after a successful OAuth 2 authentication (or through Weibo's JS library).
 	 */
 	public WeiboTemplate(String accessToken) {
+		this(accessToken, null);
+	}
+
+	public WeiboTemplate(String accessToken, String applicationNamespace) {
 		super(accessToken);
+		this.applicationNamespace = applicationNamespace;
+		initialize();
 	}
 
 	@Override
@@ -92,6 +107,10 @@ public class WeiboTemplate extends AbstractOAuth2ApiBinding implements WeiboApiO
 	@Override
 	public TimelineOperations timelineOperations() {
 		return timelineOperations;
+	}
+
+	public String getApplicationNamespace() {
+		return applicationNamespace;
 	}
 
 	// low-level Graph API operations
