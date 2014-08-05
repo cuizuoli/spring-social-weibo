@@ -8,7 +8,7 @@
 	<name>Spring Social Weibo</name>
 	<url>http://open.weibo.com/</url>
 	<properties>
-		<jdk.version>1.8</jdk.version>
+		<jdk.version>1.7</jdk.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<org.springframework.social.version>1.1.0.RELEASE</org.springframework.social.version>
 	</properties>
