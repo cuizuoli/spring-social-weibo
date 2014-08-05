@@ -24,6 +24,8 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.social.oauth2.AccessGrant;
 import org.springframework.social.oauth2.OAuth2Template;
 import org.springframework.social.support.ClientHttpRequestFactorySelector;
+import org.springframework.social.weibo.api.WeiboOauth2Operations;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
@@ -33,7 +35,7 @@ import org.springframework.web.client.RestTemplate;
  * registered by default from parsing the results.
  * @author cuizuoli
  */
-public class WeiboOAuth2Template extends OAuth2Template {
+public class WeiboOAuth2Template extends OAuth2Template implements WeiboOauth2Operations {
 
 	private static final String AUTHORIZE_URL = "https://api.weibo.com/oauth2/authorize";
 	private static final String ACCESS_TOKEN_URL = "https://api.weibo.com/oauth2/access_token";
@@ -68,6 +70,34 @@ public class WeiboOAuth2Template extends OAuth2Template {
 			expireTime = Long.valueOf(expires);
 		}
 		return new AccessGrant(accessToken, scope, null, expireTime);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public AccessGrant getTokenInfo(String accessToken) {
+		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
+		parameters.add("access_token", accessToken);
+		MultiValueMap<String, String> response = getRestTemplate().postForObject(GET_TOKEN_INFO_URL, parameters, MultiValueMap.class);
+		String expires = response.getFirst("expires_in");
+		String scope = response.getFirst("scope");
+		Long expireTime = null;
+		if (StringUtils.isNotEmpty(expires)) {
+			expireTime = Long.valueOf(expires);
+		}
+		return new AccessGrant(accessToken, scope, null, expireTime);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean revokeOauth2(String accessToken) {
+		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
+		parameters.add("access_token", accessToken);
+		MultiValueMap<String, String> response = getRestTemplate().postForObject(GET_TOKEN_INFO_URL, parameters, MultiValueMap.class);
+		String result = response.getFirst("result");
+		if (StringUtils.isNotEmpty(result)) {
+			return Boolean.valueOf(result);
+		}
+		return false;
 	}
 
 }
