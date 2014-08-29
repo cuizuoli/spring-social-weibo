@@ -19,7 +19,7 @@ import org.springframework.social.config.xml.AbstractProviderConfigBeanDefinitio
 import org.springframework.social.config.xml.AbstractProviderConfigNamespaceHandler;
 
 /**
- * 
+ * WeiboNamespaceHandler
  * @author cuizuoli
  */
 public class WeiboNamespaceHandler extends AbstractProviderConfigNamespaceHandler {

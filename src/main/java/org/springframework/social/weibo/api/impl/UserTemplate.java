@@ -22,7 +22,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 /**
- * 
+ * UserTemplate
  * @author cuizuoli
  */
 class UserTemplate extends AbstractWeiboOperations implements UserOperations {

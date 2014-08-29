@@ -22,7 +22,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 /**
- * 
+ * TimelineTemplate
  * @author cuizuoli
  */
 public class TimelineTemplate extends AbstractWeiboOperations implements TimelineOperations {
