@@ -15,19 +15,28 @@
  */
 package org.springframework.social.weibo.connect;
 
+import java.io.IOException;
 import java.util.Collections;
+import java.util.Iterator;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.social.oauth2.AccessGrant;
 import org.springframework.social.oauth2.OAuth2Template;
 import org.springframework.social.support.ClientHttpRequestFactorySelector;
+import org.springframework.social.weibo.api.WeiboAccessGrant;
 import org.springframework.social.weibo.api.WeiboOauth2Operations;
+import org.springframework.social.weibo.api.impl.json.WeiboModule;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Weibo-specific extension of OAuth2Template to use a RestTemplate that recognizes form-encoded responses as "text/plain".
@@ -36,6 +45,8 @@ import org.springframework.web.client.RestTemplate;
  * @author cuizuoli
  */
 public class WeiboOAuth2Template extends OAuth2Template implements WeiboOauth2Operations {
+
+	private final Log log = LogFactory.getLog(getClass());
 
 	private static final String AUTHORIZE_URL = "https://api.weibo.com/oauth2/authorize";
 	private static final String ACCESS_TOKEN_URL = "https://api.weibo.com/oauth2/access_token";
@@ -62,14 +73,18 @@ public class WeiboOAuth2Template extends OAuth2Template implements WeiboOauth2Op
 	@Override
 	protected AccessGrant postForAccessGrant(String accessTokenUrl, MultiValueMap<String, String> parameters) {
 		MultiValueMap<String, String> response = getRestTemplate().postForObject(accessTokenUrl, parameters, MultiValueMap.class);
-		String expires = response.getFirst("expires_in");
-		String accessToken = response.getFirst("access_token");
-		String scope = response.getFirst("scope");
-		Long expireTime = null;
-		if (StringUtils.isNotEmpty(expires)) {
-			expireTime = Long.valueOf(expires);
+		Iterator<String> keyIterator = response.toSingleValueMap().keySet().iterator();
+		WeiboAccessGrant weiboAccessGrant = new WeiboAccessGrant();
+		if (keyIterator.hasNext()) {
+			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.registerModule(new WeiboModule());
+			try {
+				weiboAccessGrant = objectMapper.readValue(keyIterator.next(), WeiboAccessGrant.class);
+			} catch (IOException e) {
+				log.error(ExceptionUtils.getFullStackTrace(e));
+			}
 		}
-		return new AccessGrant(accessToken, scope, null, expireTime);
+		return new AccessGrant(weiboAccessGrant.getAccessToken(), weiboAccessGrant.getScope(), weiboAccessGrant.getRefreshToken(), weiboAccessGrant.getExpireTime());
 	}
 
 	@SuppressWarnings("unchecked")

@@ -15,6 +15,8 @@
  */
 package org.springframework.social.weibo.api.impl;
 
+import java.util.Map;
+
 import org.springframework.social.weibo.api.AccountOperations;
 import org.springframework.social.weibo.api.WeiboApiOperations;
 
@@ -31,9 +33,12 @@ public class AccountTemplate extends AbstractWeiboOperations implements AccountO
 		this.weiboApi = weiboApi;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public long getUid() {
-		return weiboApi.getObject("account/get_uid.json", Long.class);
+		requireAuthorization();
+		Map map = weiboApi.getObject("account/get_uid.json", Map.class);
+		return Long.valueOf(map.get("uid").toString());
 	}
 
 }

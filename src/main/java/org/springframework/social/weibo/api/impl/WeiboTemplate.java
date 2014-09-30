@@ -25,6 +25,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.social.NotAuthorizedException;
 import org.springframework.social.oauth2.AbstractOAuth2ApiBinding;
 import org.springframework.social.oauth2.OAuth2Version;
+import org.springframework.social.oauth2.TokenStrategy;
 import org.springframework.social.support.ClientHttpRequestFactorySelector;
 import org.springframework.social.support.URIBuilder;
 import org.springframework.social.weibo.api.AccountOperations;
@@ -83,7 +84,7 @@ public class WeiboTemplate extends AbstractOAuth2ApiBinding implements WeiboApiO
 	}
 
 	public WeiboTemplate(String accessToken, String applicationNamespace) {
-		super(accessToken);
+		super(accessToken, TokenStrategy.ACCESS_TOKEN_PARAMETER);
 		this.applicationNamespace = applicationNamespace;
 		initialize();
 	}

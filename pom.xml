@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springframework.social</groupId>
 	<artifactId>spring-social-weibo</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.1.0.RELEASE</version>
 	<packaging>jar</packaging>
 	<name>Spring Social Weibo</name>
 	<url>http://open.weibo.com/</url>
