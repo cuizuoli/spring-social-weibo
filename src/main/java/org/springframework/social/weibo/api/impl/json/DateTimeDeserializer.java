@@ -16,6 +16,7 @@
 package org.springframework.social.weibo.api.impl.json;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -37,7 +38,7 @@ public class DateTimeDeserializer extends JsonDeserializer<DateTime> {
 
 	@Override
 	public DateTime deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-		return DateTimeFormat.forPattern(getDateFormat()).parseDateTime(jp.getText());
+		return DateTimeFormat.forPattern(getDateFormat()).withLocale(Locale.ENGLISH).parseDateTime(jp.getText());
 	}
 
 	protected String getDateFormat() {

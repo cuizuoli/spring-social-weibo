@@ -15,8 +15,8 @@
  */
 package org.springframework.social.weibo.api.impl.json;
 
-import java.util.Date;
-
+import org.joda.time.DateTime;
+import org.springframework.social.weibo.api.PicUrl;
 import org.springframework.social.weibo.api.Visible;
 import org.springframework.social.weibo.api.WeiboProfile;
 
@@ -33,7 +33,7 @@ abstract class StatusMixin extends WeiboObjectMixin {
 
 	@JsonProperty("created_at")
 	@JsonDeserialize(using = WeiboDateTimeDeserializer.class)
-	Date createdAt;
+	DateTime createdAt;
 
 	@JsonProperty("id")
 	Long id;
@@ -66,7 +66,7 @@ abstract class StatusMixin extends WeiboObjectMixin {
 	String inReplyToScreenName;
 
 	@JsonProperty("pic_urls")
-	String[] picUrls;
+	PicUrl[] picUrls;
 
 	@JsonProperty("geo")
 	String geo;

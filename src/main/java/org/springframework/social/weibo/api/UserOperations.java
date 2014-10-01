@@ -29,7 +29,15 @@ public interface UserOperations {
 	 * @return the user's profile information.
 	 * @throws ApiException if there is an error while communicating with Weibo.
 	 */
-	WeiboProfile getUserProfile(long userId);
+	WeiboProfile getUserProfileById(long userId);
+
+	/**
+	 * Retrieves the profile for the specified user.
+	 * @param name the Weibo user name to retrieve profile data for.
+	 * @return the user's profile information.
+	 * @throws ApiException if there is an error while communicating with Weibo.
+	 */
+	WeiboProfile getUserProfileByName(String name);
 
 	/**
 	 * Retrieves the profile for the specified user.
@@ -37,6 +45,6 @@ public interface UserOperations {
 	 * @return the user's profile information.
 	 * @throws ApiException if there is an error while communicating with Weibo.
 	 */
-	WeiboProfile getUserProfile(String domain);
+	WeiboProfile getUserProfileByDomain(String domain);
 
 }

@@ -21,7 +21,7 @@ package org.springframework.social.weibo.api.impl.json;
  */
 public class WeiboDateTimeDeserializer extends DateTimeDeserializer {
 
-	private final static String WEIBO_DATE_FORMAT = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+	private final static String WEIBO_DATE_FORMAT = "EEE MMM dd HH:mm:ss Z yyyy";
 
 	@Override
 	protected String getDateFormat() {

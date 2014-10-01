@@ -33,7 +33,7 @@ public class WeiboAdapter implements ApiAdapter<Weibo> {
 	public boolean test(Weibo weibo) {
 		try {
 			long userId = weibo.accountOperations().getUid();
-			weibo.userOperations().getUserProfile(userId);
+			weibo.userOperations().getUserProfileById(userId);
 			return true;
 		} catch (ApiException e) {
 			return false;
@@ -43,7 +43,7 @@ public class WeiboAdapter implements ApiAdapter<Weibo> {
 	@Override
 	public void setConnectionValues(Weibo weibo, ConnectionValues values) {
 		long userId = weibo.accountOperations().getUid();
-		WeiboProfile profile = weibo.userOperations().getUserProfile(userId);
+		WeiboProfile profile = weibo.userOperations().getUserProfileById(userId);
 		values.setProviderUserId(profile.getIdstr());
 		values.setDisplayName(profile.getName());
 		values.setProfileUrl(profile.getProfileUrl());
@@ -53,7 +53,7 @@ public class WeiboAdapter implements ApiAdapter<Weibo> {
 	@Override
 	public UserProfile fetchUserProfile(Weibo weibo) {
 		long userId = weibo.accountOperations().getUid();
-		WeiboProfile profile = weibo.userOperations().getUserProfile(userId);
+		WeiboProfile profile = weibo.userOperations().getUserProfileById(userId);
 		return new UserProfileBuilder()
 			.setName(profile.getName())
 			.setUsername(profile.getScreenName())

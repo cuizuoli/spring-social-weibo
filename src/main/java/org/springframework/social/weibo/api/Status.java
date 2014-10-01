@@ -15,14 +15,14 @@
  */
 package org.springframework.social.weibo.api;
 
-import java.util.Date;
+import org.joda.time.DateTime;
 
 /**
  * Status
  * @author cuizuoli
  */
 public class Status extends WeiboObject {
-	private Date createdAt;
+	private DateTime createdAt;
 	private Long id;
 	private Long mid;
 	private Long idstr;
@@ -33,7 +33,7 @@ public class Status extends WeiboObject {
 	private String inReplyToStatusId;
 	private String inReplyToUserId;
 	private String inReplyToScreenName;
-	private String[] picUrls;
+	private PicUrl[] picUrls;
 	private String geo;
 	private WeiboProfile user;
 	private Integer repostsCount;
@@ -43,11 +43,11 @@ public class Status extends WeiboObject {
 	private Visible visible;
 	private String[] darwinTags;
 
-	public Date getCreatedAt() {
+	public DateTime getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Date createdAt) {
+	public void setCreatedAt(DateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 
@@ -131,11 +131,11 @@ public class Status extends WeiboObject {
 		this.inReplyToScreenName = inReplyToScreenName;
 	}
 
-	public String[] getPicUrls() {
+	public PicUrl[] getPicUrls() {
 		return picUrls;
 	}
 
-	public void setPicUrls(String[] picUrls) {
+	public void setPicUrls(PicUrl[] picUrls) {
 		this.picUrls = picUrls;
 	}
 

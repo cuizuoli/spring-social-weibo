@@ -35,17 +35,24 @@ class UserTemplate extends AbstractWeiboOperations implements UserOperations {
 	}
 
 	@Override
-	public WeiboProfile getUserProfile(long userId) {
+	public WeiboProfile getUserProfileById(long userId) {
 		MultiValueMap<String, String> queryMap = new LinkedMultiValueMap<String, String>();
-		queryMap.add("userId", String.valueOf(userId));
+		queryMap.add("uid", String.valueOf(userId));
 		return weiboApi.getObject("users/show.json", WeiboProfile.class, queryMap);
 	}
 
 	@Override
-	public WeiboProfile getUserProfile(String domain) {
+	public WeiboProfile getUserProfileByName(String name) {
+		MultiValueMap<String, String> queryMap = new LinkedMultiValueMap<String, String>();
+		queryMap.add("screen_name", name);
+		return weiboApi.getObject("users/show.json", WeiboProfile.class, queryMap);
+	}
+
+	@Override
+	public WeiboProfile getUserProfileByDomain(String domain) {
 		MultiValueMap<String, String> queryMap = new LinkedMultiValueMap<String, String>();
 		queryMap.add("domain", domain);
-		return weiboApi.getObject("users/domain_show", WeiboProfile.class, queryMap);
+		return weiboApi.getObject("users/domain_show.json", WeiboProfile.class, queryMap);
 	}
 
 }

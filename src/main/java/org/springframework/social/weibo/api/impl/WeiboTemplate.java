@@ -166,6 +166,7 @@ public class WeiboTemplate extends AbstractOAuth2ApiBinding implements WeiboApiO
 	private void initSubApis() {
 		userOperations = new UserTemplate(this, isAuthorized());
 		accountOperations = new AccountTemplate(this, isAuthorized());
+		timelineOperations = new TimelineTemplate(this, isAuthorized());
 	}
 
 }

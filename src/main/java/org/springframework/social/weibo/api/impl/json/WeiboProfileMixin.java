@@ -15,8 +15,7 @@
  */
 package org.springframework.social.weibo.api.impl.json;
 
-import java.util.Date;
-
+import org.joda.time.DateTime;
 import org.springframework.social.weibo.api.Status;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -92,7 +91,7 @@ abstract class WeiboProfileMixin extends WeiboObjectMixin {
 
 	@JsonProperty("created_at")
 	@JsonDeserialize(using = WeiboDateTimeDeserializer.class)
-	Date createdAt;
+	DateTime createdAt;
 
 	@JsonProperty("following")
 	Boolean following;
