@@ -25,6 +25,8 @@ import org.springframework.social.weibo.api.impl.WeiboTemplate;
  */
 public interface Weibo extends ApiBinding {
 
+	TokenOperations tokenOperations();
+
 	UserOperations userOperations();
 
 	AccountOperations accountOperations();

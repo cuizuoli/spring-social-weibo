@@ -30,6 +30,7 @@ import org.springframework.social.support.ClientHttpRequestFactorySelector;
 import org.springframework.social.support.URIBuilder;
 import org.springframework.social.weibo.api.AccountOperations;
 import org.springframework.social.weibo.api.TimelineOperations;
+import org.springframework.social.weibo.api.TokenOperations;
 import org.springframework.social.weibo.api.UserOperations;
 import org.springframework.social.weibo.api.Weibo;
 import org.springframework.social.weibo.api.WeiboApiOperations;
@@ -51,6 +52,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author cuizuoli
  */
 public class WeiboTemplate extends AbstractOAuth2ApiBinding implements WeiboApiOperations, Weibo {
+
+	private TokenOperations tokenOperations;
 
 	private UserOperations userOperations;
 
@@ -96,6 +99,11 @@ public class WeiboTemplate extends AbstractOAuth2ApiBinding implements WeiboApiO
 	}
 
 	@Override
+	public TokenOperations tokenOperations() {
+		return tokenOperations;
+	}
+
+	@Override
 	public UserOperations userOperations() {
 		return userOperations;
 	}
@@ -116,20 +124,46 @@ public class WeiboTemplate extends AbstractOAuth2ApiBinding implements WeiboApiO
 
 	// low-level Graph API operations
 	@Override
+	public ObjectMapper getObjectMapper() {
+		return objectMapper;
+	}
+
+	@Override
 	public <T> T getObject(String objectId, Class<T> type) {
-		URI uri = URIBuilder.fromUri(WEIBO_API_URL + objectId).build();
+		URI uri = URIBuilder.fromUri(BASE_API_URL + objectId).build();
 		return getRestTemplate().getForObject(uri, type);
 	}
 
 	@Override
 	public <T> T getObject(String objectId, Class<T> type, MultiValueMap<String, String> queryMap) {
-		URI uri = URIBuilder.fromUri(WEIBO_API_URL + objectId).queryParams(queryMap).build();
+		URI uri = URIBuilder.fromUri(BASE_API_URL + objectId).queryParams(queryMap).build();
 		return getRestTemplate().getForObject(uri, type);
 	}
 
 	@Override
 	public <T> T postObject(String objectId, Class<T> type, MultiValueMap<String, String> queryMap) {
-		URI uri = URIBuilder.fromUri(WEIBO_API_URL + objectId).build();
+		URI uri = URIBuilder.fromUri(BASE_API_URL + objectId).build();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		HttpEntity<? extends Object> httpEntity = new HttpEntity<Object>(queryMap, headers);
+		return getRestTemplate().postForObject(uri, httpEntity, type);
+	}
+
+	@Override
+	public <T> T getOauth2Object(String objectId, Class<T> type) {
+		URI uri = URIBuilder.fromUri(BASE_OAUTH2_URL + objectId).build();
+		return getRestTemplate().getForObject(uri, type);
+	}
+
+	@Override
+	public <T> T getOauth2Object(String objectId, Class<T> type, MultiValueMap<String, String> queryMap) {
+		URI uri = URIBuilder.fromUri(BASE_OAUTH2_URL + objectId).queryParams(queryMap).build();
+		return getRestTemplate().getForObject(uri, type);
+	}
+
+	@Override
+	public <T> T postOauth2Object(String objectId, Class<T> type, MultiValueMap<String, String> queryMap) {
+		URI uri = URIBuilder.fromUri(BASE_OAUTH2_URL + objectId).build();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		HttpEntity<? extends Object> httpEntity = new HttpEntity<Object>(queryMap, headers);
@@ -164,6 +198,7 @@ public class WeiboTemplate extends AbstractOAuth2ApiBinding implements WeiboApiO
 	}
 
 	private void initSubApis() {
+		tokenOperations = new TokenTemplate(this, isAuthorized());
 		userOperations = new UserTemplate(this, isAuthorized());
 		accountOperations = new AccountTemplate(this, isAuthorized());
 		timelineOperations = new TimelineTemplate(this, isAuthorized());

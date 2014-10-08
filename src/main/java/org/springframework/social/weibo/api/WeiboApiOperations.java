@@ -17,11 +17,19 @@ package org.springframework.social.weibo.api;
 
 import org.springframework.util.MultiValueMap;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * Defines low-level operations against Weibo's API.
  * @author cuizuoli
  */
 public interface WeiboApiOperations {
+
+	/**
+	 * getObjectMapper
+	 * @return
+	 */
+	ObjectMapper getObjectMapper();
 
 	/**
 	 * getObject
@@ -49,5 +57,32 @@ public interface WeiboApiOperations {
 	 */
 	<T> T postObject(String objectId, Class<T> type, MultiValueMap<String, String> queryMap);
 
-	static final String WEIBO_API_URL = "https://api.weibo.com/2/";
+	/**
+	 * getOauth2Object
+	 * @param objectId
+	 * @param type
+	 * @return
+	 */
+	<T> T getOauth2Object(String objectId, Class<T> type);
+
+	/**
+	 * getOauth2Object
+	 * @param objectId
+	 * @param type
+	 * @param queryMap
+	 * @return
+	 */
+	<T> T getOauth2Object(String objectId, Class<T> type, MultiValueMap<String, String> queryMap);
+
+	/**
+	 * postOauth2Object
+	 * @param objectId
+	 * @param type
+	 * @param queryMap
+	 * @return
+	 */
+	<T> T postOauth2Object(String objectId, Class<T> type, MultiValueMap<String, String> queryMap);
+
+	static final String BASE_API_URL = "https://api.weibo.com/2/";
+	static final String BASE_OAUTH2_URL = "https://api.weibo.com/oauth2/";
 }

@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,9 +29,7 @@ import org.springframework.social.oauth2.AccessGrant;
 import org.springframework.social.oauth2.OAuth2Template;
 import org.springframework.social.support.ClientHttpRequestFactorySelector;
 import org.springframework.social.weibo.api.WeiboAccessGrant;
-import org.springframework.social.weibo.api.WeiboOauth2Operations;
 import org.springframework.social.weibo.api.impl.json.WeiboModule;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
@@ -44,7 +41,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * registered by default from parsing the results.
  * @author cuizuoli
  */
-public class WeiboOAuth2Template extends OAuth2Template implements WeiboOauth2Operations {
+public class WeiboOAuth2Template extends OAuth2Template {
 
 	private final Log log = LogFactory.getLog(getClass());
 
@@ -85,34 +82,6 @@ public class WeiboOAuth2Template extends OAuth2Template implements WeiboOauth2Op
 			}
 		}
 		return new AccessGrant(weiboAccessGrant.getAccessToken(), weiboAccessGrant.getScope(), weiboAccessGrant.getRefreshToken(), weiboAccessGrant.getExpireTime());
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public AccessGrant getTokenInfo(String accessToken) {
-		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
-		parameters.add("access_token", accessToken);
-		MultiValueMap<String, String> response = getRestTemplate().postForObject(GET_TOKEN_INFO_URL, parameters, MultiValueMap.class);
-		String expires = response.getFirst("expires_in");
-		String scope = response.getFirst("scope");
-		Long expireTime = null;
-		if (StringUtils.isNotEmpty(expires)) {
-			expireTime = Long.valueOf(expires);
-		}
-		return new AccessGrant(accessToken, scope, null, expireTime);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public boolean revokeOauth2(String accessToken) {
-		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
-		parameters.add("access_token", accessToken);
-		MultiValueMap<String, String> response = getRestTemplate().postForObject(GET_TOKEN_INFO_URL, parameters, MultiValueMap.class);
-		String result = response.getFirst("result");
-		if (StringUtils.isNotEmpty(result)) {
-			return Boolean.valueOf(result);
-		}
-		return false;
 	}
 
 }

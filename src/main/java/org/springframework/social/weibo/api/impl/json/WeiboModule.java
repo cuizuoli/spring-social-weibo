@@ -15,8 +15,10 @@
  */
 package org.springframework.social.weibo.api.impl.json;
 
+import org.springframework.social.weibo.api.PageTokenInfo;
 import org.springframework.social.weibo.api.PicUrl;
 import org.springframework.social.weibo.api.Status;
+import org.springframework.social.weibo.api.TokenInfo;
 import org.springframework.social.weibo.api.Visible;
 import org.springframework.social.weibo.api.WeiboAccessGrant;
 import org.springframework.social.weibo.api.WeiboProfile;
@@ -38,6 +40,8 @@ public class WeiboModule extends SimpleModule {
 
 	@Override
 	public void setupModule(SetupContext context) {
+		context.setMixInAnnotations(TokenInfo.class, TokenInfoMixin.class);
+		context.setMixInAnnotations(PageTokenInfo.class, PageTokenInfoMixin.class);
 		context.setMixInAnnotations(WeiboAccessGrant.class, WeiboAccessGrantMixin.class);
 		context.setMixInAnnotations(Visible.class, VisibleMixin.class);
 		context.setMixInAnnotations(PicUrl.class, PicUrlMixin.class);
