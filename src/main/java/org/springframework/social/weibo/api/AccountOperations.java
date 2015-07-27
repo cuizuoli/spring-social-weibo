@@ -15,12 +15,38 @@
  */
 package org.springframework.social.weibo.api;
 
+import java.util.Map;
+
 /**
  * AccountOperations
  * @author cuizuoli
  */
 public interface AccountOperations {
 
-	long getUid();
+	/**
+	 * 获取所有的学校列表
+	 * @param province - 省份范围，省份ID。
+	 * @param city - 城市范围，城市ID。
+	 * @param area - 区域范围，区ID。
+	 * @param type - 学校类型，1：大学、2：高中、3：中专技校、4：初中、5：小学，默认为1。
+	 * @param capital - 学校首字母，默认为A。
+	 * @param keyword - 学校名称关键字。
+	 * @param count - 返回的记录条数，默认为10。
+	 * @return
+	 */
+	Map<String, Object>[] getSchoolList(Integer province, Integer city, Integer area, Integer type, String capital,
+			String keyword, Integer count);
+
+	/**
+	 * 获取当前登录用户的API访问频率限制情况
+	 * @return
+	 */
+	Map<String, Object> getRateLimitStatus();
+
+	/**
+	 * OAuth授权之后，获取授权用户的UID
+	 * @return
+	 */
+	Map<String, Object> getUid();
 
 }

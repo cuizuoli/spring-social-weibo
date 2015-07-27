@@ -15,6 +15,8 @@
  */
 package org.springframework.social.weibo.api;
 
+import java.util.Map;
+
 import org.junit.Test;
 
 /**
@@ -25,7 +27,8 @@ public class TimelineOperationsTest extends AbstractWeiboTest {
 
 	@Test
 	public void updateStatus() {
-		weiboTemplate.timelineOperations().updateStatus("测试Test");
+		Map<String, Object> status = weiboTemplate.timelineOperations().updateStatus("测试Test");
+		System.out.println(status);
 	}
 
 }

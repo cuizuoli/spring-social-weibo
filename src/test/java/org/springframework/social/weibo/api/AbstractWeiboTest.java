@@ -17,10 +17,9 @@ package org.springframework.social.weibo.api;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.runner.RunWith;
-import org.springframework.social.weibo.api.impl.WeiboTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.social.weibo.config.ServiceConfig;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -36,10 +35,6 @@ public abstract class AbstractWeiboTest {
 	@Resource
 	protected Weibo weiboTemplate;
 
-	protected final Log log = LogFactory.getLog(getClass());
-
-	protected static final String ACCESS_TOKEN = "2.00RDYo1CWcEyREafd1818b940jROxJ";
-
-	protected final WeiboApiOperations weiboApi = new WeiboTemplate(ACCESS_TOKEN);
+	protected final Logger log = LoggerFactory.getLogger(getClass());
 
 }

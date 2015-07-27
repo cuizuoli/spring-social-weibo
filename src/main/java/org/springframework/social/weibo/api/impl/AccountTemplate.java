@@ -19,6 +19,8 @@ import java.util.Map;
 
 import org.springframework.social.weibo.api.AccountOperations;
 import org.springframework.social.weibo.api.WeiboApiOperations;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 /**
  * AccountTemplate
@@ -33,12 +35,45 @@ public class AccountTemplate extends AbstractWeiboOperations implements AccountO
 		this.weiboApi = weiboApi;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings("unchecked")
 	@Override
-	public long getUid() {
-		requireAuthorization();
-		Map map = weiboApi.getObject("account/get_uid.json", Map.class);
-		return Long.valueOf(map.get("uid").toString());
+	public Map<String, Object>[] getSchoolList(Integer province, Integer city, Integer area, Integer type,
+			String capital, String keyword, Integer count) {
+		MultiValueMap<String, String> queryMap = new LinkedMultiValueMap<String, String>();
+		if (province != null) {
+			queryMap.add("province", String.valueOf(province));
+		}
+		if (city != null) {
+			queryMap.add("city", String.valueOf(city));
+		}
+		if (area != null) {
+			queryMap.add("area", String.valueOf(area));
+		}
+		if (type != null) {
+			queryMap.add("type", String.valueOf(type));
+		}
+		if (capital != null) {
+			queryMap.add("capital", String.valueOf(capital));
+		}
+		if (keyword != null) {
+			queryMap.add("keyword", String.valueOf(keyword));
+		}
+		if (count != null) {
+			queryMap.add("count", String.valueOf(count));
+		}
+		return weiboApi.getObject("account/profile/school_list.json", Map[].class, queryMap);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> getRateLimitStatus() {
+		return weiboApi.getObject("account/rate_limit_status.json", Map.class);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> getUid() {
+		return weiboApi.getObject("account/get_uid.json", Map.class);
 	}
 
 }

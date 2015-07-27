@@ -15,13 +15,14 @@
  */
 package org.springframework.social.weibo.connect;
 
+import java.util.Map;
+
 import org.springframework.social.ApiException;
 import org.springframework.social.connect.ApiAdapter;
 import org.springframework.social.connect.ConnectionValues;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.social.connect.UserProfileBuilder;
 import org.springframework.social.weibo.api.Weibo;
-import org.springframework.social.weibo.api.WeiboProfile;
 
 /**
  * Weibo ApiAdapter implementation.
@@ -32,8 +33,8 @@ public class WeiboAdapter implements ApiAdapter<Weibo> {
 	@Override
 	public boolean test(Weibo weibo) {
 		try {
-			long userId = weibo.accountOperations().getUid();
-			weibo.userOperations().getUserProfileById(userId);
+			Map<String, Object> userId = weibo.accountOperations().getUid();
+			weibo.userOperations().getUserProfileById((Long)userId.get("uid"));
 			return true;
 		} catch (ApiException e) {
 			return false;
@@ -42,21 +43,21 @@ public class WeiboAdapter implements ApiAdapter<Weibo> {
 
 	@Override
 	public void setConnectionValues(Weibo weibo, ConnectionValues values) {
-		long userId = weibo.accountOperations().getUid();
-		WeiboProfile profile = weibo.userOperations().getUserProfileById(userId);
-		values.setProviderUserId(profile.getIdstr());
-		values.setDisplayName(profile.getName());
-		values.setProfileUrl(profile.getProfileUrl());
-		values.setImageUrl(profile.getProfileImageUrl());
+		Map<String, Object> userId = weibo.accountOperations().getUid();
+		Map<String, Object> profile = weibo.userOperations().getUserProfileById((Long)userId.get("uid"));
+		values.setProviderUserId((String)profile.get("idstr"));
+		values.setDisplayName((String)profile.get("name"));
+		values.setProfileUrl((String)profile.get("profileUrl"));
+		values.setImageUrl((String)profile.get("profileImageUrl"));
 	}
 
 	@Override
 	public UserProfile fetchUserProfile(Weibo weibo) {
-		long userId = weibo.accountOperations().getUid();
-		WeiboProfile profile = weibo.userOperations().getUserProfileById(userId);
+		Map<String, Object> userId = weibo.accountOperations().getUid();
+		Map<String, Object> profile = weibo.userOperations().getUserProfileById((Long)userId.get("uid"));
 		return new UserProfileBuilder()
-			.setName(profile.getName())
-			.setUsername(profile.getScreenName())
+			.setName((String)profile.get("name"))
+			.setUsername((String)profile.get("screenName"))
 			.build();
 	}
 

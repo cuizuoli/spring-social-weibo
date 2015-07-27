@@ -15,9 +15,10 @@
  */
 package org.springframework.social.weibo.api.impl;
 
+import java.util.Map;
+
 import org.springframework.social.weibo.api.UserOperations;
 import org.springframework.social.weibo.api.WeiboApiOperations;
-import org.springframework.social.weibo.api.WeiboProfile;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -34,25 +35,36 @@ class UserTemplate extends AbstractWeiboOperations implements UserOperations {
 		this.weiboApi = weiboApi;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public WeiboProfile getUserProfileById(long userId) {
+	public Map<String, Object> getUserProfileById(long userId) {
 		MultiValueMap<String, String> queryMap = new LinkedMultiValueMap<String, String>();
 		queryMap.add("uid", String.valueOf(userId));
-		return weiboApi.getObject("users/show.json", WeiboProfile.class, queryMap);
+		return weiboApi.getObject("users/show.json", Map.class, queryMap);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public WeiboProfile getUserProfileByName(String name) {
+	public Map<String, Object> getUserProfileByName(String name) {
 		MultiValueMap<String, String> queryMap = new LinkedMultiValueMap<String, String>();
 		queryMap.add("screen_name", name);
-		return weiboApi.getObject("users/show.json", WeiboProfile.class, queryMap);
+		return weiboApi.getObject("users/show.json", Map.class, queryMap);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public WeiboProfile getUserProfileByDomain(String domain) {
+	public Map<String, Object> getUserProfileByDomain(String domain) {
 		MultiValueMap<String, String> queryMap = new LinkedMultiValueMap<String, String>();
 		queryMap.add("domain", domain);
-		return weiboApi.getObject("users/domain_show.json", WeiboProfile.class, queryMap);
+		return weiboApi.getObject("users/domain_show.json", Map.class, queryMap);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object>[] getUserCountsByIds(String userIds) {
+		MultiValueMap<String, String> queryMap = new LinkedMultiValueMap<String, String>();
+		queryMap.add("uids", userIds);
+		return weiboApi.getObject("users/counts.json", Map[].class, queryMap);
 	}
 
 }

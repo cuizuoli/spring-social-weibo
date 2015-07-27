@@ -15,12 +15,14 @@
  */
 package org.springframework.social.weibo.api;
 
+import java.util.Map;
+
 /**
  * TimelineOperations
  * @author cuizuoli
  */
 public interface TimelineOperations {
 
-	Status updateStatus(String message);
+	Map<String, Object> updateStatus(String message);
 
 }

@@ -15,6 +15,8 @@
  */
 package org.springframework.social.weibo.api;
 
+import java.util.Map;
+
 import org.junit.Test;
 
 /**
@@ -24,9 +26,21 @@ import org.junit.Test;
 public class AccountOperationsTest extends AbstractWeiboTest {
 
 	@Test
+	public void getSchoolList() {
+		Map<String, Object>[] schools = weiboTemplate.accountOperations().getSchoolList(null, null, null, null, null, "东软", null);
+		log.info(schools.toString());
+	}
+
+	@Test
+	public void getRateLimitStatus() {
+		Map<String, Object> rateLimitStatus = weiboTemplate.accountOperations().getRateLimitStatus();
+		log.info(rateLimitStatus.toString());
+	}
+
+	@Test
 	public void getUid() {
-		long uid = weiboTemplate.accountOperations().getUid();
-		log.info("uid - " + uid);
+		Map<String, Object> userId = weiboTemplate.accountOperations().getUid();
+		log.info(userId.toString());
 	}
 
 }

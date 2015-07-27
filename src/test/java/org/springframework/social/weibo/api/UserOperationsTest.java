@@ -15,6 +15,8 @@
  */
 package org.springframework.social.weibo.api;
 
+import java.util.Map;
+
 import org.junit.Test;
 
 /**
@@ -25,20 +27,26 @@ public class UserOperationsTest extends AbstractWeiboTest {
 
 	@Test
 	public void getUserProfileById() {
-		WeiboProfile weiboProfile = weiboTemplate.userOperations().getUserProfileById(1904178193);
-		log.info("weiboProfile - " + weiboProfile);
+		Map<String, Object> profile = weiboTemplate.userOperations().getUserProfileById(1904178193);
+		log.info(profile.toString());
 	}
 
 	@Test
 	public void getUserProfileByName() {
-		WeiboProfile weiboProfile = weiboTemplate.userOperations().getUserProfileByName("微博开放平台");
-		log.info("weiboProfile - " + weiboProfile);
+		Map<String, Object> profile = weiboTemplate.userOperations().getUserProfileByName("微博开放平台");
+		log.info(profile.toString());
 	}
 
 	@Test
 	public void getUserProfileByDomain() {
-		WeiboProfile weiboProfile = weiboTemplate.userOperations().getUserProfileByDomain("openapi");
-		log.info("weiboProfile - " + weiboProfile);
+		Map<String, Object> profile = weiboTemplate.userOperations().getUserProfileByDomain("openapi");
+		log.info(profile.toString());
+	}
+
+	@Test
+	public void getUserCountsByIds() {
+		Map<String, Object>[] counts = weiboTemplate.userOperations().getUserCountsByIds("1904178193");
+		log.info(counts.toString());
 	}
 
 }

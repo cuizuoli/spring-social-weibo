@@ -15,6 +15,8 @@
  */
 package org.springframework.social.weibo.api;
 
+import java.util.Map;
+
 import org.springframework.social.ApiException;
 
 /**
@@ -29,7 +31,7 @@ public interface UserOperations {
 	 * @return the user's profile information.
 	 * @throws ApiException if there is an error while communicating with Weibo.
 	 */
-	WeiboProfile getUserProfileById(long userId);
+	Map<String, Object> getUserProfileById(long userId);
 
 	/**
 	 * Retrieves the profile for the specified user.
@@ -37,7 +39,7 @@ public interface UserOperations {
 	 * @return the user's profile information.
 	 * @throws ApiException if there is an error while communicating with Weibo.
 	 */
-	WeiboProfile getUserProfileByName(String name);
+	Map<String, Object> getUserProfileByName(String name);
 
 	/**
 	 * Retrieves the profile for the specified user.
@@ -45,6 +47,13 @@ public interface UserOperations {
 	 * @return the user's profile information.
 	 * @throws ApiException if there is an error while communicating with Weibo.
 	 */
-	WeiboProfile getUserProfileByDomain(String domain);
+	Map<String, Object> getUserProfileByDomain(String domain);
+
+	/**
+	 * Retrieves the counts for the specified user.
+	 * @param userIds
+	 * @return
+	 */
+	Map<String, Object>[] getUserCountsByIds(String userIds);
 
 }

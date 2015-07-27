@@ -24,8 +24,8 @@ import org.springframework.social.ApiException;
 @SuppressWarnings("serial")
 public class WeiboException extends ApiException {
 
-	public WeiboException(String code, String message) {
-		super("weibo", code + " - " + message);
+	public WeiboException(String code, String message, String request) {
+		super("weibo", code + " : " + message + " - " + request);
 	}
 
 }

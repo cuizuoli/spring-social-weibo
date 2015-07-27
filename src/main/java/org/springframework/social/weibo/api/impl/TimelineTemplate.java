@@ -15,7 +15,8 @@
  */
 package org.springframework.social.weibo.api.impl;
 
-import org.springframework.social.weibo.api.Status;
+import java.util.Map;
+
 import org.springframework.social.weibo.api.TimelineOperations;
 import org.springframework.social.weibo.api.WeiboApiOperations;
 import org.springframework.util.LinkedMultiValueMap;
@@ -34,11 +35,12 @@ public class TimelineTemplate extends AbstractWeiboOperations implements Timelin
 		this.weiboApi = weiboApi;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Status updateStatus(String message) {
+	public Map<String, Object> updateStatus(String message) {
 		MultiValueMap<String, String> queryMap = new LinkedMultiValueMap<String, String>();
 		queryMap.add("status", message);
-		return weiboApi.postObject("statuses/update.json", Status.class, queryMap);
+		return weiboApi.postObject("statuses/update.json", Map.class, queryMap);
 	}
 
 }

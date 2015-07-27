@@ -43,7 +43,7 @@ public class WeiboErrorHandler extends DefaultResponseErrorHandler {
 
 	private final static Log logger = LogFactory.getLog(WeiboErrorHandler.class);
 
-	//private final static String WEIBO = "weibo";
+	private final static String WEIBO = "weibo";
 
 	@Override
 	public void handleError(ClientHttpResponse response) throws IOException {
@@ -66,92 +66,21 @@ public class WeiboErrorHandler extends DefaultResponseErrorHandler {
 		// Can rely only on the message (which itself isn't very consistent).
 		String code = errorDetails.get("error_code");
 		String message = errorDetails.get("error");
+		String request = errorDetails.get("request");
 
-		throw new WeiboException(code, message);
+		throw new WeiboException(code, message, request);
 
-		//		if (statusCode == HttpStatus.NOT_FOUND) {
-		//			if (error.contains("Some of the aliases you requested do not exist")) {
-		//				throw new ResourceNotFoundException(WEIBO, error);
-		//			}
-		//		} else if (statusCode == HttpStatus.BAD_REQUEST) {
-		//			if (error.contains("Unknown path components")) {
-		//				throw new ResourceNotFoundException(WEIBO, error);
-		//			} else if (error.equals("An access token is required to request this resource.")) {
-		//				throw new MissingAuthorizationException(WEIBO);
-		//			} else if (error.equals("An active access token must be used to query information about the current user.")) {
-		//				throw new MissingAuthorizationException(WEIBO);
-		//			} else if (error.startsWith("Error validating access token")) {
-		//				handleInvalidAccessToken(error);
-		//			} else if (error.equals("Invalid access token signature.")) { // Access token that fails signature validation
-		//				throw new InvalidAuthorizationException(WEIBO, error);
-		//			} else if (error.contains("Application does not have the capability to make this API call.")
-		//				|| error.contains("App must be on whitelist")) {
-		//				throw new OperationNotPermittedException(WEIBO, error);
-		//			} else if (error.contains("Invalid fbid") || error.contains("The parameter url is required")) {
-		//				throw new OperationNotPermittedException(WEIBO, "Invalid object for this operation");
-		//			} else if (error.contains("Duplicate status error")) {
-		//				throw new DuplicateStatusException(WEIBO, error);
-		//			} else if (error.contains("Feed action request limit reached")) {
-		//				throw new RateLimitExceededException(WEIBO);
-		//			} else if (error.contains("The status you are trying to publish is a duplicate of, or too similar to, one that we recently posted to Twitter")) {
-		//				throw new DuplicateStatusException(WEIBO, error);
-		//			}
-		//		} else if (statusCode == HttpStatus.UNAUTHORIZED) {
-		//			if (error.startsWith("Error validating access token")) {
-		//				handleInvalidAccessToken(error);
-		//			} else if (error.equals("Invalid OAuth access token.")) { // Bogus access token
-		//				throw new InvalidAuthorizationException(WEIBO, error);
-		//			} else if (error.startsWith("Error validating application.")) { // Access token with incorrect app ID
-		//				throw new InvalidAuthorizationException(WEIBO, error);
-		//			}
-		//			throw new NotAuthorizedException(WEIBO, error);
-		//		} else if (statusCode == HttpStatus.FORBIDDEN) {
-		//			if (error.contains("Requires extended permission")) {
-		//				throw new InsufficientPermissionException(WEIBO, error.split(": ")[1]);
-		//			} else if (error.contains("Permissions error")) {
-		//				throw new InsufficientPermissionException(WEIBO);
-		//			} else if (error.contains("The user hasn't authorized the application to perform this action")) {
-		//				throw new InsufficientPermissionException(WEIBO);
-		//			} else {
-		//				throw new OperationNotPermittedException(WEIBO, error);
-		//			}
-		//		} else if (statusCode == HttpStatus.NOT_FOUND) {
-		//			throw new ResourceNotFoundException(WEIBO, error);
-		//		} else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR) {
-		//			if (error.equals("User must be an owner of the friendlist")) { // watch for pattern in similar error in other resources
-		//				throw new ResourceOwnershipException(error);
-		//			} else if (error.equals("The member must be a friend of the current user.")) {
-		//				throw new NotAFriendException(error);
-		//			} else {
-		//				throw new InternalServerErrorException(WEIBO, error);
-		//			}
-		//		}
 	}
-
-	//	private void handleInvalidAccessToken(String message) {
-	//		if (message.contains("Session has expired at unix time")) {
-	//			throw new ExpiredAuthorizationException("weibo");
-	//		} else if (message.contains("The session has been invalidated because the user has changed the password.")) {
-	//			throw new RevokedAuthorizationException("weibo", message);
-	//		} else if (message.contains("The session is invalid because the user logged out.")) {
-	//			throw new RevokedAuthorizationException("weibo", message);
-	//		} else if (message.contains("The session was invalidated explicitly using an API call.")) {
-	//			throw new RevokedAuthorizationException("weibo", message);
-	//		} else if (message.contains("Session does not match current stored session.")) {
-	//			throw new RevokedAuthorizationException("weibo", message);
-	//		} else {
-	//			throw new InvalidAuthorizationException("weibo", message);
-	//		}
-	//	}
 
 	private void handleUncategorizedError(ClientHttpResponse response, Map<String, String> errorDetails) {
 		try {
 			super.handleError(response);
 		} catch (Exception e) {
 			if (errorDetails != null) {
-				throw new UncategorizedApiException("weibo", errorDetails.get("message"), e);
+				throw new UncategorizedApiException(WEIBO, errorDetails.get("error_code") + ":"
+					+ errorDetails.get("error"), e);
 			} else {
-				throw new UncategorizedApiException("weibo", "No error details from Weibo", e);
+				throw new UncategorizedApiException(WEIBO, "No error details from Weibo", e);
 			}
 		}
 	}
@@ -171,7 +100,7 @@ public class WeiboErrorHandler extends DefaultResponseErrorHandler {
 		}
 
 		try {
-			return mapper.<Map<String, String>> readValue(json, new TypeReference<Map<String, String>>() {
+			return mapper.<Map<String, String>>readValue(json, new TypeReference<Map<String, String>>() {
 			});
 		} catch (JsonParseException e) {
 			return null;
