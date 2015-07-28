@@ -27,7 +27,7 @@ import org.springframework.social.weibo.api.impl.WeiboTemplate;
 @Configuration
 public class ServiceConfig {
 
-	private static final String ACCESS_TOKEN = "2.00RDYo1C8J8wTEabc400601fV39cqC";
+	private static final String ACCESS_TOKEN = "2.00RDYo1C8J8wTEe0d81b55a11MyF5E";
 
 	@Bean
 	public WeiboApiOperations weiboApi() {

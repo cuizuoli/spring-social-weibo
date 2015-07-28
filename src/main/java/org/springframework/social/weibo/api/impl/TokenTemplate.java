@@ -30,8 +30,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.social.weibo.api.PageTokenInfo;
-import org.springframework.social.weibo.api.TokenInfo;
 import org.springframework.social.weibo.api.TokenOperations;
 import org.springframework.social.weibo.api.WeiboApiOperations;
 import org.springframework.util.LinkedMultiValueMap;
@@ -55,29 +53,12 @@ public class TokenTemplate extends AbstractWeiboOperations implements TokenOpera
 		this.weiboApi = weiboApi;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public PageTokenInfo getPageTokenInfo(String signedRequest, String appSecret) {
-		PageTokenInfo tokenInfo = null;
+	public Map<String, Object> getPageTokenInfo(String signedRequest, String appSecret) {
+		Map<String, Object> tokenInfo = null;
 		try {
-			tokenInfo = weiboApi.getObjectMapper().readValue(parseSignedRequest(signedRequest, appSecret), PageTokenInfo.class);
-		} catch (JsonParseException e) {
-			log.error(ExceptionUtils.getFullStackTrace(e));
-		} catch (JsonMappingException e) {
-			log.error(ExceptionUtils.getFullStackTrace(e));
-		} catch (IOException e) {
-			log.error(ExceptionUtils.getFullStackTrace(e));
-		}
-		return tokenInfo;
-	}
-
-	@Override
-	public TokenInfo getTokenInfo() {
-		requireAuthorization();
-		MultiValueMap<String, String> queryMap = new LinkedMultiValueMap<String, String>();
-		String response = weiboApi.postOauth2Object("get_token_info", String.class, queryMap);
-		TokenInfo tokenInfo = null;
-		try {
-			tokenInfo = weiboApi.getObjectMapper().readValue(response, TokenInfo.class);
+			tokenInfo = weiboApi.getObjectMapper().readValue(parseSignedRequest(signedRequest, appSecret), Map.class);
 		} catch (JsonParseException e) {
 			log.error(ExceptionUtils.getFullStackTrace(e));
 		} catch (JsonMappingException e) {
@@ -90,13 +71,13 @@ public class TokenTemplate extends AbstractWeiboOperations implements TokenOpera
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean revokeOauth2() {
+	public Map<String, Object> getTokenInfo() {
 		requireAuthorization();
 		MultiValueMap<String, String> queryMap = new LinkedMultiValueMap<String, String>();
-		String response = weiboApi.postOauth2Object("revokeoauth2", String.class, queryMap);
-		Map<String, String> map = new HashMap<String, String>();
+		String response = weiboApi.postOauth2Object("get_token_info", String.class, queryMap);
+		Map<String, Object> tokenInfo = null;
 		try {
-			map = weiboApi.getObjectMapper().readValue(response, Map.class);
+			tokenInfo = weiboApi.getObjectMapper().readValue(response, Map.class);
 		} catch (JsonParseException e) {
 			log.error(ExceptionUtils.getFullStackTrace(e));
 		} catch (JsonMappingException e) {
@@ -104,11 +85,26 @@ public class TokenTemplate extends AbstractWeiboOperations implements TokenOpera
 		} catch (IOException e) {
 			log.error(ExceptionUtils.getFullStackTrace(e));
 		}
-		String result = map.get("result");
-		if (StringUtils.isNotEmpty(result)) {
-			return Boolean.valueOf(result);
+		return tokenInfo;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> revokeOauth2() {
+		requireAuthorization();
+		MultiValueMap<String, String> queryMap = new LinkedMultiValueMap<String, String>();
+		String response = weiboApi.postOauth2Object("revokeoauth2", String.class, queryMap);
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			result = weiboApi.getObjectMapper().readValue(response, Map.class);
+		} catch (JsonParseException e) {
+			log.error(ExceptionUtils.getFullStackTrace(e));
+		} catch (JsonMappingException e) {
+			log.error(ExceptionUtils.getFullStackTrace(e));
+		} catch (IOException e) {
+			log.error(ExceptionUtils.getFullStackTrace(e));
 		}
-		return false;
+		return result;
 	}
 
 	private static final String ALGORITHM_HMACSHA256 = "hmacSHA256";
@@ -144,7 +140,6 @@ public class TokenTemplate extends AbstractWeiboOperations implements TokenOpera
 			// access token
 			if (StringUtils.equals(base64Token, base64Token1)) {
 				tokenInfoValue = new String(Base64.decodeBase64(token));
-				log.info(tokenInfoValue);
 			}
 		} catch (NoSuchAlgorithmException e) {
 			log.error(ExceptionUtils.getFullStackTrace(e));

@@ -26,22 +26,11 @@ public class WeiboConnectionFactory extends OAuth2ConnectionFactory<Weibo> {
 
 	/**
 	 * Creates a WeiboConnectionFactory for the given application ID and secret.
-	 * Using this constructor, no application namespace is set (and therefore Weibo's Open Graph operations cannot be used).
 	 * @param appId The application's App ID as assigned by Weibo 
 	 * @param appSecret The application's App Secret as assigned by Weibo
 	 */
 	public WeiboConnectionFactory(String appId, String appSecret) {
-		this(appId, appSecret, null);
-	}
-
-	/**
-	 * Creates a WeiboConnectionFactory for the given application ID, secret, and namespace.
-	 * @param appId The application's App ID as assigned by Weibo 
-	 * @param appSecret The application's App Secret as assigned by Weibo
-	 * @param appNamespace The application's App Namespace as configured with Weibo. Enables use of Open Graph operations.
-	 */
-	public WeiboConnectionFactory(String appId, String appSecret, String appNamespace) {
-		super("weibo", new WeiboServiceProvider(appId, appSecret, appNamespace), new WeiboAdapter());
+		super("weibo", new WeiboServiceProvider(appId, appSecret), new WeiboAdapter());
 	}
 
 }

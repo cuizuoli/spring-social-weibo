@@ -25,21 +25,17 @@ import org.springframework.social.weibo.api.impl.WeiboTemplate;
  */
 public class WeiboServiceProvider extends AbstractOAuth2ServiceProvider<Weibo> {
 
-	private String appNamespace;
-
 	/**
-	 * Creates a WeiboServiceProvider for the given application ID, secret, and namespace.
+	 * Creates a WeiboServiceProvider for the given application ID and secret.
 	 * @param appId The application's App ID as assigned by Weibo 
 	 * @param appSecret The application's App Secret as assigned by Weibo
-	 * @param appNamespace The application's App Namespace as configured with Weibo. Enables use of Open Graph operations.
 	 */
-	public WeiboServiceProvider(String appId, String appSecret, String appNamespace) {
+	public WeiboServiceProvider(String appId, String appSecret) {
 		super(new WeiboOAuth2Template(appId, appSecret));
-		this.appNamespace = appNamespace;
 	}
 
 	public Weibo getApi(String accessToken) {
-		return new WeiboTemplate(accessToken, appNamespace);
+		return new WeiboTemplate(accessToken);
 	}
 
 }

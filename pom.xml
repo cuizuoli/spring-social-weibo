@@ -77,12 +77,6 @@
 			<artifactId>spring-social-web</artifactId>
 			<version>${org.springframework.social.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.social</groupId>
-			<artifactId>spring-social-test</artifactId>
-			<version>1.0.3.RELEASE</version>
-			<scope>test</scope>
-		</dependency>
 		<!-- org.springframework -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -117,12 +111,6 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
 			<version>2.6.0</version>
-		</dependency>
-		<!-- joda-time -->
-		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>2.4</version>
 		</dependency>
 		<!-- commons-lang -->
 		<dependency>

@@ -34,8 +34,10 @@ public class WeiboAdapter implements ApiAdapter<Weibo> {
 	public boolean test(Weibo weibo) {
 		try {
 			Map<String, Object> userId = weibo.accountOperations().getUid();
-			weibo.userOperations().getUserProfileById((Long)userId.get("uid"));
-			return true;
+			if (userId.get("uid") != null) {
+				return true;
+			}
+			return false;
 		} catch (ApiException e) {
 			return false;
 		}
@@ -45,10 +47,10 @@ public class WeiboAdapter implements ApiAdapter<Weibo> {
 	public void setConnectionValues(Weibo weibo, ConnectionValues values) {
 		Map<String, Object> userId = weibo.accountOperations().getUid();
 		Map<String, Object> profile = weibo.userOperations().getUserProfileById((Long)userId.get("uid"));
-		values.setProviderUserId((String)profile.get("idstr"));
-		values.setDisplayName((String)profile.get("name"));
-		values.setProfileUrl((String)profile.get("profileUrl"));
-		values.setImageUrl((String)profile.get("profileImageUrl"));
+		values.setProviderUserId((String)profile.get("id"));
+		values.setDisplayName((String)profile.get("screen_name"));
+		values.setProfileUrl("http://weibo.com/" + (String)profile.get("profile_url"));
+		values.setImageUrl((String)profile.get("profile_image_url"));
 	}
 
 	@Override
@@ -56,8 +58,8 @@ public class WeiboAdapter implements ApiAdapter<Weibo> {
 		Map<String, Object> userId = weibo.accountOperations().getUid();
 		Map<String, Object> profile = weibo.userOperations().getUserProfileById((Long)userId.get("uid"));
 		return new UserProfileBuilder()
-			.setName((String)profile.get("name"))
-			.setUsername((String)profile.get("screenName"))
+			.setName((String)profile.get("screen_name"))
+			.setUsername((String)profile.get("id"))
 			.build();
 	}
 

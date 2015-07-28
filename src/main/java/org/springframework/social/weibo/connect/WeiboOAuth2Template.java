@@ -58,11 +58,11 @@ public class WeiboOAuth2Template extends OAuth2Template {
 		RestTemplate restTemplate = new RestTemplate(ClientHttpRequestFactorySelector.getRequestFactory());
 		FormHttpMessageConverter messageConverter = new FormHttpMessageConverter() {
 			public boolean canRead(Class<?> clazz, MediaType mediaType) {
-				// always read as x-www-url-formencoded even though Weibo sets contentType to text/plain				
+				// always read as x-www-url-formencoded even though Weibo sets contentType to text/plain
 				return true;
 			}
 		};
-		restTemplate.setMessageConverters(Collections.<HttpMessageConverter<?>> singletonList(messageConverter));
+		restTemplate.setMessageConverters(Collections.<HttpMessageConverter<?>>singletonList(messageConverter));
 		return restTemplate;
 	}
 

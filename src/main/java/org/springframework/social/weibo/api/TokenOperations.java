@@ -15,16 +15,32 @@
  */
 package org.springframework.social.weibo.api;
 
+import java.util.Map;
+
 /**
  * TokenOperations
  * @author cuizuoli
  */
 public interface TokenOperations {
 
-	PageTokenInfo getPageTokenInfo(String signedRequest, String appSecret);
+	/**
+	 * 解析站内应用post的SignedRequest split为part1和part2两部分
+	 * @param signedRequest
+	 * @param appSecret
+	 * @return
+	 */
+	Map<String, Object> getPageTokenInfo(String signedRequest, String appSecret);
 
-	TokenInfo getTokenInfo();
+	/**
+	 * 查询用户access_token的授权相关信息，包括授权时间，过期时间和scope权限。
+	 * @return
+	 */
+	Map<String, Object> getTokenInfo();
 
-	boolean revokeOauth2();
+	/**
+	 * 授权回收接口，帮助开发者主动取消用户的授权。
+	 * @return
+	 */
+	Map<String, Object> revokeOauth2();
 
 }

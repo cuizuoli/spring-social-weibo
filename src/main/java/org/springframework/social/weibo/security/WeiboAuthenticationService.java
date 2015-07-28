@@ -29,8 +29,4 @@ public class WeiboAuthenticationService extends OAuth2AuthenticationService<Weib
 		super(new WeiboConnectionFactory(apiKey, appSecret));
 	}
 
-	public WeiboAuthenticationService(String apiKey, String appSecret, String appNamespace) {
-		super(new WeiboConnectionFactory(apiKey, appSecret, appNamespace));
-	}
-
 }
